@@ -3,4 +3,4 @@ An open-world tank fight game with simple AI, terrain and advanced control syste
 
 # Comments
 This project is done by following the Section 4 of the Ureal Course https://www.udemy.com/unrealcourse.
-This project is the first UE4 remote project.
+This project is the first UE4 remote project and I am learning with it.
