@@ -47,13 +47,21 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) cons
 	FRotator ViewPointRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(ViewPoint, ViewPointRotation);
 
+
+
 	// TODO Calculate the crosshair point Rotator
-	// TODO Get and verify the Viewport Size
+	// TODO Get the Spring Arm length
 	int32 ScreenSizeX;
 	int32 ScreenSizeY;
 	GetWorld()->GetFirstPlayerController()->GetViewportSize(ScreenSizeX, ScreenSizeY);
-	// UE_LOG(LogTemp, Warning, TEXT("X: %s, Y: %s"), *FString::FromInt(ScreenSizeX), *FString::FromInt(ScreenSizeY));
-	FRotator CrosshairPointRotation = ViewPointRotation;
+	
+	float alpha = atan(0.167*ScreenSizeY/1000/1.3)*180/3.14;
+	FVector ForLogVector = FVector(alpha, 0, 100);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *ForLogVector.ToString());
+
+	FRotator CrosshairPointRotation = ViewPointRotation.Add(alpha, 0, 0);
+
+
 
 	// Calculate the final reachable point (we take at maximum a kilometer projection because the landscape is 1 km)
 	FVector FinalReachablePoint = ViewPoint + CrosshairPointRotation.Vector() * 100 * 1000; // in cm *100 gives 1m and * 1000 gives 1km
