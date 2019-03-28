@@ -8,11 +8,10 @@ void ATankPlayerController::BeginPlay() {
 
 	ATank *ControlledTank = GetControlledTank();
 	if (!ControlledTank) {
-		UE_LOG(LogTemp, Warning, TEXT("Controlled Tank not found"));
+		UE_LOG(LogTemp, Error, TEXT("Player Controlled Tank not found"));
 		return;
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *ControlledTank->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("Player posses %s"), *ControlledTank->GetName());
 }
 
 
