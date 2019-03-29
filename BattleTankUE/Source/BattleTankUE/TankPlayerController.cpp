@@ -9,6 +9,7 @@
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
 
+	// TODO Delete these test lines
 	/*ATank *ControlledTank = GetControlledTank();
 	if (!ControlledTank) {
 		UE_LOG(LogTemp, Error, TEXT("Player Controlled Tank not found"));
@@ -38,7 +39,7 @@ void ATankPlayerController::AimTowardsCrosshair() {
 	FVector HitLocation;
 	if (GetSightRayHitLocation(&HitLocation)) {
 		// TODO Delete the hit location log
-		// UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
 
 		// TODO Tell controlled tank to aim at this point
 	}
@@ -59,8 +60,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) cons
 	int32 ScreenSizeX;
 	int32 ScreenSizeY;
 	GetWorld()->GetFirstPlayerController()->GetViewportSize(ScreenSizeX, ScreenSizeY);
-	// TODO Use C++ Pi
-	float alpha = atan(0.334 * ScreenSizeY / ScreenSizeX) * 180 / 3.14;
+	float alpha = atan(0.334 * ScreenSizeY / ScreenSizeX) * 180 / PI;
 
 	/// Crosshair Rotator has alpha degrees more in pitch than ViewPointRotator
 	FRotator CrosshairRotator = ViewPointRotator.Add(alpha, 0, 0);
@@ -96,8 +96,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) cons
 
 	if (!Hit.GetComponent()) return false;
 
-	// TODO Delete the log of the hit component name
-	// UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *Hit.GetComponent()->GetName());
+	// TODO Delete the hit component name log
+	UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *Hit.GetComponent()->GetName());
 	*OutHitLocation = Hit.ImpactPoint;
 	return true;
 }

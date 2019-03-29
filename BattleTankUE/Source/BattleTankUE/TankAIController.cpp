@@ -7,8 +7,9 @@
 void ATankAIController::BeginPlay() {
 	Super::BeginPlay();
 
-	ATank *PlayerTank = GetPlayerTank();
-	UE_LOG(LogTemp, Warning, TEXT("Player Tank found: %s"), *PlayerTank->GetName());
+	// TODO Delete these test lines
+	/*ATank *PlayerTank = GetPlayerTank();
+	UE_LOG(LogTemp, Warning, TEXT("Player Tank found: %s"), *PlayerTank->GetName());*/
 }
 
 
