@@ -27,4 +27,10 @@ private:
 
 	// Returns true if hit landscape and modify the OUT parameter with world location of ray-cast through crosshair
 	bool GetSightRayHitLocation(FVector *OutHitLocation) const;
+
+	UPROPERTY(EditAnywhere)
+	float CrosshairXLocation = 0.5;
+
+	UPROPERTY(EditAnywhere)
+	float CrosshairYLocation = 0.33333;
 };

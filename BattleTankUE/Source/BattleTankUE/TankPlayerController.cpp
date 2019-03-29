@@ -8,14 +8,6 @@
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
-
-	// TODO Delete these test lines
-	/*ATank *ControlledTank = GetControlledTank();
-	if (!ControlledTank) {
-		UE_LOG(LogTemp, Error, TEXT("Player Controlled Tank not found"));
-		return;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("Player posses %s"), *ControlledTank->GetName());*/
 }
 
 
@@ -39,7 +31,7 @@ void ATankPlayerController::AimTowardsCrosshair() {
 	FVector HitLocation;
 	if (GetSightRayHitLocation(&HitLocation)) {
 		// TODO Delete the hit location log
-		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
+		// UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
 
 		// TODO Tell controlled tank to aim at this point
 	}
@@ -47,32 +39,21 @@ void ATankPlayerController::AimTowardsCrosshair() {
 
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) const{
-	/// The ViewPoint is the Ray-Cast start point
-	FVector ViewPoint;
-	FRotator ViewPointRotator;
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(ViewPoint, ViewPointRotator);
+	/// Find the crosshair position in pixels
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	FVector2D CrosshairLocation(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
 
-	/// To calculate the Ray-Cast end point we need to calculate the CrosshairRotator
-	/// To calculate the CrosshairRotator we need to calculate alpha (in degrees), the angle between the center of the screen and the crosshair
-	/// The horizontal field of view is 90 degrees, thus
-	/// alpha = atan( (0.5 - 33.3) * ScreenSizeY / ScreenSizeX ) * 180 / Pi
-	// TODO Make a general formula that depands on the horizental field of view in degrees that must be get as parameter from the player camera
-	int32 ScreenSizeX;
-	int32 ScreenSizeY;
-	GetWorld()->GetFirstPlayerController()->GetViewportSize(ScreenSizeX, ScreenSizeY);
-	float alpha = atan(0.334 * ScreenSizeY / ScreenSizeX) * 180 / PI;
+	// TODO De-project the screen crosshair position to a World Location
 
-	/// Crosshair Rotator has alpha degrees more in pitch than ViewPointRotator
-	FRotator CrosshairRotator = ViewPointRotator.Add(alpha, 0, 0);
+	// TOD Line trace along crosshair and see what we hit in a specific rang
 
-	/// Calculate the ray cast end point
-	/// The CrosshairRotator.Vector() gives 1cm long vector
-	/// We take 1km projection because the landscape is 1km large
-	FVector RayEndPoint = ViewPoint + CrosshairRotator.Vector() * 100000;
+	return true;
+
+	/// ------------------- Helper Functinos ----------------------
 
 	/// Helper Debug Line
-	// TODO Comment the helper function
-	DrawDebugLine(
+	/*DrawDebugLine(
 		GetWorld(),
 		ViewPoint,
 		RayEndPoint,
@@ -81,10 +62,10 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) cons
 		0.f,
 		0.f,
 		10.f
-	);
+	);*/
 
 	/// Ray-cast taking into account only the landscape
-	FCollisionQueryParams TracePatameters(FName(TEXT("")), false, GetOwner());
+	/*FCollisionQueryParams TracePatameters(FName(TEXT("")), false, GetOwner());
 	FHitResult Hit;
 	GetWorld()->LineTraceSingleByObjectType(
 		Hit,
@@ -92,12 +73,11 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) cons
 		RayEndPoint,
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldStatic),
 		TracePatameters
-	);
+	);*/
 
-	if (!Hit.GetComponent()) return false;
+	// if (!Hit.GetComponent()) return false;
 
 	// TODO Delete the hit component name log
-	UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *Hit.GetComponent()->GetName());
-	*OutHitLocation = Hit.ImpactPoint;
-	return true;
+	// UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *Hit.GetComponent()->GetName());
+	// *OutHitLocation = Hit.ImpactPoint;
 }
