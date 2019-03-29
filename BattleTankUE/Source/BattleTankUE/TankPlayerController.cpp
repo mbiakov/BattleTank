@@ -28,17 +28,14 @@ void ATankPlayerController::AimTowardsCrosshair() {
 		return;
 	}
 
-	FVector HitLocation;
-	if (GetSightRayHitLocation(&HitLocation)) {
-		// TODO Delete the log
-		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
-
+	FVector HitLocation(0);
+	if (GetSightRayHitLocation(HitLocation)) {
 		// TODO Tell controlled tank to aim at this point
 	}
 }
 
 
-bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) const{
+bool ATankPlayerController::GetSightRayHitLocation(FVector &OutHitLocation) const{
 	/// Find the crosshair position in pixels
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
@@ -48,44 +45,38 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector *OutHitLocation) cons
 	FVector CrosshairLocation, CrosshairDirection;
 	DeprojectScreenPositionToWorld(CrosshairScreenLocation.X, CrosshairScreenLocation.Y, CrosshairLocation, CrosshairDirection);
 
-	/// Get the View Point Location
-	FVector ViewPointLocation;
-	FRotator ViewPointRotator;
-	GetPlayerViewPoint(ViewPointLocation, ViewPointRotator);
+	/// Ray-cast in Crosshair direction
+	return GetLookVectorHitLocation(OutHitLocation, CrosshairDirection);
+}
 
-	/// Calculate the Ray-Cast end point
-	/// The CrosshairDirection is 1cm long vector
-	/// We take 1km projection because the landscape is 1km large
-	FVector RayEndPoint = ViewPointLocation + CrosshairDirection * 100000;
-	
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector &OutHitLocation, FVector LookDirection) const {
+	FVector CameraLocation = PlayerCameraManager->GetCameraLocation();
+	FVector RayEndPoint = CameraLocation + LookDirection * LineTraceRange;
+
 	/// Helper Debug Line
-	// TODO Comment the Debug Line
-	DrawDebugLine(
+	/*DrawDebugLine(
 		GetWorld(),
-		ViewPointLocation,
+		CameraLocation,
 		RayEndPoint,
 		FColor(255, 0, 0),
 		false,
 		0.f,
 		0.f,
 		10.f
-	);
+	);*/
 
 	/// Line trace along the crosshair
-	FCollisionQueryParams TracePatameters(FName(TEXT("")), false, GetOwner());
 	FHitResult Hit;
-	GetWorld()->LineTraceSingleByObjectType(
+	GetWorld()->LineTraceSingleByChannel(
 		Hit,
-		ViewPointLocation,
+		CameraLocation,
 		RayEndPoint,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldStatic),
-		TracePatameters
+		ECollisionChannel::ECC_Visibility
 	);
-
+	
 	if (!Hit.GetComponent()) return false;
 
-	// TODO Delete the log
-	UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *Hit.GetComponent()->GetName());
-	*OutHitLocation = Hit.ImpactPoint;
+	OutHitLocation = Hit.Location;
 	return true;
 }
