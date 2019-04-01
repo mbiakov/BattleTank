@@ -48,7 +48,7 @@ void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) {
 		ESuggestProjVelocityTraceOption::DoNotTrace,
 		FCollisionResponseParams::DefaultResponseParam,
 		TArray<AActor*>(),
-		false
+		true
 	);
 
 	if (bHaveAimSolution) {
@@ -59,7 +59,7 @@ void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) {
 		MoveBarrelTowards(AimDirection);
 	} else {
 		// TODO Delete this log
-		// UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), GetWorld()->GetTimeSeconds());
+		// UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), GetWorld()->GetTimeSeconds());
 	}
 }
 
