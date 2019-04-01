@@ -3,6 +3,7 @@
 #include "TankAimingComponent.h"
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values for this component's properties
@@ -30,7 +31,42 @@ void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet
 }
 
 
-void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) const {
-	UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
+void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) {
+	if (!Barrel) return;
 
+	FVector LaunchVelocity(0);
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		LaunchVelocity,
+		Barrel->GetSocketLocation(FName("Projectile")),
+		AimPoint,
+		LaunchSpeed,
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace,
+		FCollisionResponseParams::DefaultResponseParam,
+		TArray<AActor*>(),
+		false
+	);
+
+	if (bHaveAimSolution) {
+		FVector AimDirection = LaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+	}
+}
+
+
+void UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection){
+	/// Calculate the difference between the actual barrel rotation and and the NewBarrelDirection
+	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
+	FRotator NewBarrelRotator = NewBarrelDirection.Rotation();
+	FRotator DeltaRotator = NewBarrelRotator - BarrelRotator;
+	
+	// TODO Delete this log
+	// UE_LOG(LogTemp, Warning, TEXT("Actual Rotation: %s"), *DeltaRotator.ToString());
+
+	// TODO Move the Barrel the right amount this frame
+
+	// TODO Give a max elevetion speed and frame rate
 }
