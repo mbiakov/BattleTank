@@ -25,13 +25,12 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 }
 
 
-void UTankAimingComponent::AimAt(FVector AimPoint) const {
-	FString TankName = GetOwner()->GetName();
-	FString BarrelLocation = Barrel->GetComponentLocation().ToString();
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *TankName, *AimPoint.ToString(), *BarrelLocation);
+void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet) {
+	Barrel = BarrelToSet;
 }
 
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet) {
-	Barrel = BarrelToSet;
+void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) const {
+	UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed);
+
 }
