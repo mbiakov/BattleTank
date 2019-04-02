@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
-#include "GameFramework/Actor.h"
-#include "Components/StaticMeshComponent.h"
-#include "Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values for this component's properties
@@ -45,10 +43,10 @@ void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) {
 		false,
 		0,
 		0,
-		ESuggestProjVelocityTraceOption::DoNotTrace,
+		ESuggestProjVelocityTraceOption::DoNotTrace, // Must be set otherwise there is a BUG
 		FCollisionResponseParams::DefaultResponseParam,
 		TArray<AActor*>(),
-		true
+		false
 	);
 
 	if (bHaveAimSolution) {
