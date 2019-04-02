@@ -35,5 +35,5 @@ public:
 	void SetBarrelReference(UTankBarrel *BarrelToSet);
 
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float ProjectileInitialSpeed = 100000; // TODO Find sensible default
+	float ProjectileInitialSpeed = 3500;
 };
