@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -27,6 +28,10 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet) {
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet) {
+	Turret = TurretToSet;
 }
 
 
@@ -67,6 +72,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection){
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator NewBarrelRotator = NewBarrelDirection.Rotation();
 	FRotator DeltaRotator = NewBarrelRotator - BarrelRotator;
-	
+
 	Barrel->Elevate(DeltaRotator.Pitch);
+	Turret->Rotate(DeltaRotator.Yaw);
 }
