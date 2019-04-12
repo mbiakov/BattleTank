@@ -40,4 +40,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float ProjectileInitialSpeed = 3500;
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void Fire();
 };

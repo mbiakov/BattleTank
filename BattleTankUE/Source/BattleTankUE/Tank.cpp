@@ -38,3 +38,9 @@ void ATank::SetBarrelReference(UTankBarrel * BarrelToSet) {
 void ATank::SetTurretReference(UTankTurret * TurretToSet) {
 	TankAimingComponent->SetTurretReference(TurretToSet);
 }
+
+
+void ATank::Fire(){
+	// TODO Delete the log
+	UE_LOG(LogTemp, Warning, TEXT("Fire method called"));
+}
