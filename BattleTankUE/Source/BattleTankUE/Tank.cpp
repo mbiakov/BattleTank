@@ -50,6 +50,11 @@ void ATank::Fire(){
 		return;
 	}
 
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) >= ReloadTime;
+	if (!isReloaded) return;
+
+	LastFireTime = GetWorld()->GetTimeSeconds();
+
 	AProjectile *Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, TankBarrel->GetSocketLocation(FName("Projectile")), TankBarrel->GetSocketRotation(FName("Projectile")));
 	Projectile->LaunchProjectile(ProjectileInitialSpeed);
 }
