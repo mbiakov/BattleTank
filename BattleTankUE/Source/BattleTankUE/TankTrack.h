@@ -18,6 +18,7 @@ public:
 
 	// Maximum Force in Newtons that is applied by the Track to make the Tank move
 	// To set 1g acceleration on a 40 tonnes Tank we need about 400 000 Newtons
+	// Unreal base distance unit is centimeters
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
-	float BaseMovementForce = 400000;
+	float BaseMovementForce = 37500000;
 };
