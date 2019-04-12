@@ -7,7 +7,7 @@
 #include "TankTurret.generated.h"
 
 
-UCLASS(meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
+UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANKUE_API UTankTurret : public UStaticMeshComponent
 {
 	GENERATED_BODY()

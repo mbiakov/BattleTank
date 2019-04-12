@@ -7,7 +7,7 @@
 #include "TankBarrel.generated.h"
 
 
-UCLASS(meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
+UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANKUE_API UTankBarrel : public UStaticMeshComponent
 {
 	GENERATED_BODY()
