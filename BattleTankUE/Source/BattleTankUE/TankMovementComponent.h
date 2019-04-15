@@ -17,21 +17,21 @@ class BATTLETANKUE_API UTankMovementComponent : public UNavMovementComponent
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankTrack *LeftTrackToSet, UTankTrack *RightTrackToSet);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void MoveForward(float Acceleration);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void TurnRight(float Acceleration);
 
+private:
 	// This method is used by the Unreal pathfinding mechanism.
 	// It is called with MoveVelocity vector that indicates where the object must move to reach the Actor given in the AAIController::MoveToActor() method.
 	// We override this method with our Tank Movement System.
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
-private:
 	UTankTrack *LeftTrack = nullptr;
 	UTankTrack *RightTrack = nullptr;
 };

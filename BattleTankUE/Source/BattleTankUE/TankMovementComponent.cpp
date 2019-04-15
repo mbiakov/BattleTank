@@ -17,7 +17,6 @@ void UTankMovementComponent::MoveForward(float Acceleration) {
 	}
 	LeftTrack->MoveTrack(Acceleration);
 	RightTrack->MoveTrack(Acceleration);
-	// TODO Prevent double speed acceleration due to dual control possibility
 }
 
 
@@ -28,7 +27,6 @@ void UTankMovementComponent::TurnRight(float Acceleration) {
 	}
 	LeftTrack->MoveTrack(Acceleration);
 	RightTrack->MoveTrack(-Acceleration);
-	// TODO Prevent double speed acceleration due to dual control possibility
 }
 
 

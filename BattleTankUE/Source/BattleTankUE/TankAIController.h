@@ -23,5 +23,5 @@ private:
 	ATank *PlayerTank = nullptr;
 
 	// How close the AI Tank can get to the player
-	float AcceptanceRadius = 1000; // TODO Verify it's in centimeters
+	float AcceptanceRadius = 1000;
 };
