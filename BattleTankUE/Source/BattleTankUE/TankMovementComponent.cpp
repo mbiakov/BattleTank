@@ -36,6 +36,9 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	FVector AIMovementIntention = MoveVelocity.GetSafeNormal();
 	FVector AITankDirection = GetOwner()->GetActorForwardVector().GetSafeNormal();
 
-	float IntendedAcceleration = FVector::DotProduct(AIMovementIntention, AITankDirection);
-	MoveForward(IntendedAcceleration);
+	float AIIntendedForwardAcceleration = FVector::DotProduct(AITankDirection, AIMovementIntention);
+	MoveForward(AIIntendedForwardAcceleration);
+
+	float AIIntendedRightAcceleration = FVector::CrossProduct(AITankDirection, AIMovementIntention).Z;
+	TurnRight(AIIntendedRightAcceleration);
 }
