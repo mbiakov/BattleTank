@@ -8,6 +8,9 @@
 
 class UTankTrack;
 
+/**
+* Responsible for the Tank movements
+*/
 UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANKUE_API UTankMovementComponent : public UNavMovementComponent
 {
@@ -19,6 +22,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void MoveForward(float Acceleration);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void TurnRight(float Acceleration);
 
 private:
 	UTankTrack *LeftTrack = nullptr;

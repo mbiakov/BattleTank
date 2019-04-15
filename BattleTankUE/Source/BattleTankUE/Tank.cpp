@@ -46,7 +46,11 @@ void ATank::SetTurretReference(UTankTurret * TurretToSet) {
 
 void ATank::Fire(){
 	if (!TankBarrel) {
-		UE_LOG(LogTemp, Error, TEXT("Tank Barrel not found during firing"));
+		UE_LOG(LogTemp, Error, TEXT("UTank::Fire(): TankBarrel not found"));
+		return;
+	}
+	if (!ProjectileBlueprint) {
+		UE_LOG(LogTemp, Error, TEXT("UTank::Fire(): ProjectileBlueprint not set. Please set Projectile Blueprint in the TankBP Details panel."));
 		return;
 	}
 
