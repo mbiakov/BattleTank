@@ -8,7 +8,4 @@ void UTankTrack::SetThrottle(float Throttle) {
 	FVector ForceToApply = GetForwardVector() * Throttle * BaseMovementForce;
 	UPrimitiveComponent *TankPrimitiveComponent = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	TankPrimitiveComponent->AddForceAtLocation(ForceToApply, GetComponentLocation());
-	
-	// TODO Delete the log
-	// UE_LOG(LogTemp, Warning, TEXT("%s"), *Tank);
 }
