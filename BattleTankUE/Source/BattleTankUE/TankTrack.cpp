@@ -3,9 +3,9 @@
 #include "TankTrack.h"
 
 
-void UTankTrack::SetThrottle(float Throttle) {
+void UTankTrack::MoveTrack(float Acceleration) {
 	// TODO Clamp the input value -1 to 1
-	FVector ForceToApply = GetForwardVector() * Throttle * BaseMovementForce;
+	FVector ForceToApply = GetForwardVector() * Acceleration * BaseMovementForce;
 	UPrimitiveComponent *TankPrimitiveComponent = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	TankPrimitiveComponent->AddForceAtLocation(ForceToApply, GetComponentLocation());
 }

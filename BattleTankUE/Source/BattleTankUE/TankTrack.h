@@ -14,7 +14,7 @@ class BATTLETANKUE_API UTankTrack : public UStaticMeshComponent
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetThrottle(float Throttle);
+	void MoveTrack(float Acceleration);
 
 	// Maximum Force in Newtons that is applied by the Track to make the Tank move
 	// To set 1g acceleration on a 40 tonnes Tank we need about 400 000 Newtons
