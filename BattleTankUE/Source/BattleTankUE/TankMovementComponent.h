@@ -26,6 +26,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void TurnRight(float Acceleration);
 
+	// This method is used by the Unreal pathfinding mechanism.
+	// It is called with MoveVelocity vector that indicates where the object must move to reach the Actor given in the AAIController::MoveToActor() method.
+	// We override this method with our Tank Movement System.
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+
 private:
 	UTankTrack *LeftTrack = nullptr;
 	UTankTrack *RightTrack = nullptr;

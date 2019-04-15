@@ -30,3 +30,8 @@ void UTankMovementComponent::TurnRight(float Acceleration) {
 	RightTrack->MoveTrack(-Acceleration);
 	// TODO Prevent double speed acceleration due to dual control possibility
 }
+
+
+void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) {
+	UE_LOG(LogTemp, Warning, TEXT("%s: RequestDirectMove %s"), *GetOwner()->GetName(), *MoveVelocity.ToString());
+}
