@@ -33,5 +33,9 @@ void UTankMovementComponent::TurnRight(float Acceleration) {
 
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) {
-	UE_LOG(LogTemp, Warning, TEXT("%s: RequestDirectMove %s"), *GetOwner()->GetName(), *MoveVelocity.ToString());
+	FVector AIMovementIntention = MoveVelocity.GetSafeNormal();
+	FVector AITankDirection = GetOwner()->GetActorForwardVector().GetSafeNormal();
+
+	float IntendedAcceleration = FVector::DotProduct(AIMovementIntention, AITankDirection);
+	MoveForward(IntendedAcceleration);
 }
