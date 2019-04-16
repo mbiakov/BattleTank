@@ -32,7 +32,7 @@ ATank* ATankPlayerController::GetControlledTank() const {
 
 void ATankPlayerController::AimTowardsCrosshair() {
 	if (!GetControlledTank()) {
-		UE_LOG(LogTemp, Error, TEXT("Player Controlled Tank not found"));
+		UE_LOG(LogTemp, Error, TEXT("ATankPlayerController::AimTowardsCrosshair(): player Tank not found"));
 		return;
 	}
 
