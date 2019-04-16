@@ -7,9 +7,6 @@
 #include "Tank.generated.h"
 
 // Forward declarations
-class UTankBarrel;
-class UTankTurret;
-class UTankAimingComponent;
 class AProjectile;
 
 UCLASS()
@@ -21,27 +18,10 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent *TankAimingComponent = nullptr;
-
-public:
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void AimAt(FVector AimPoint) const;
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetBarrelReference(UTankBarrel *BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetTurretReference(UTankTurret *TurretToSet);
-
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ProjectileInitialSpeed = 3500;
+
+	void AimAt(FVector AimPoint) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
@@ -49,8 +29,6 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
-
-	UTankBarrel *TankBarrel = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3;

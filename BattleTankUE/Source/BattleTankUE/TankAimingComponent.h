@@ -18,32 +18,29 @@ enum class EFiringStatus : uint8 {
 	Reloading
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANKUE_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
 
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void SetBarrelReference(UTankBarrel *BarrelToSet);
-
-	void SetTurretReference(UTankTurret *TurretToSet);
-
 	void AimAt(FVector AimPoint, float LaunchSpeed);
 
 protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
+
 	UPROPERTY(BlueprintReadOnly)
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
 private:
 	UTankBarrel *Barrel = nullptr;
-
 	UTankTurret *Turret = nullptr;
 
 	void MoveBarrelTowards(FVector NewBarrelDirection);
