@@ -21,8 +21,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ProjectileInitialSpeed = 3500;
 
-	void AimAt(FVector AimPoint) const;
-
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
 

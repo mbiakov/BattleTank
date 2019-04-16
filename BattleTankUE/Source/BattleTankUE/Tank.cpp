@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "TankBarrel.h"
-#include "TankAimingComponent.h"
 #include "Projectile.h"
 #include "Engine/World.h"
 
@@ -11,13 +10,6 @@
 ATank::ATank() {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-}
-
-
-void ATank::AimAt(FVector AimPoint) const {
-	UTankAimingComponent *TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
-	if (!ensure(TankAimingComponent)) return;
-	TankAimingComponent->AimAt(AimPoint, ProjectileInitialSpeed);
 }
 
 

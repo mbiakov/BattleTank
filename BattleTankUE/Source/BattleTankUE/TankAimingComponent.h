@@ -27,7 +27,7 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void AimAt(FVector AimPoint, float LaunchSpeed);
+	void AimAt(FVector AimPoint);
 
 protected:
 	// Called when the game starts
@@ -44,4 +44,7 @@ private:
 	UTankTurret *Turret = nullptr;
 
 	void MoveBarrelTowards(FVector NewBarrelDirection);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ProjectileInitialSpeed = 3500;
 };
