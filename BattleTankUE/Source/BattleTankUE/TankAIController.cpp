@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// MBI Copyrights
 
 #include "TankAIController.h"
 #include "Tank.h"
