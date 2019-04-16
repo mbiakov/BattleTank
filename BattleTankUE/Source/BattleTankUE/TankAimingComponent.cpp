@@ -27,10 +27,7 @@ void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * T
 
 
 void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) {
-	if (!Barrel) {
-		UE_LOG(LogTemp, Error, TEXT("UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed): Barrel not found"));
-		return;
-	}
+	if (!ensure(Barrel)) return;
 
 	FVector LaunchVelocity(0);
 	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
@@ -56,14 +53,7 @@ void UTankAimingComponent::AimAt(FVector AimPoint, float LaunchSpeed) {
 
 
 void UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection){
-	if (!Barrel) {
-		UE_LOG(LogTemp, Error, TEXT("UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection): Barrel not found"));
-		return;
-	}
-	if (!Turret) {
-		UE_LOG(LogTemp, Error, TEXT("UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection): Turret not found"));
-		return;
-	}
+	if (!ensure(Barrel && Turret)) return;
 
 	/// Calculate the difference between the actual barrel rotation and and the NewBarrelDirection
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();

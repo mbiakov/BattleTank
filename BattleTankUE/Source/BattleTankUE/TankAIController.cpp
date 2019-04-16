@@ -16,9 +16,8 @@ void ATankAIController::BeginPlay() {
 void ATankAIController::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
 
-	if (PlayerTank) {
-		MoveToActor(PlayerTank, AcceptanceRadius);
-		AIControlledTank->AimAt(PlayerTank->GetActorLocation());
-		AIControlledTank->Fire();
-	}
+	if (!ensure(PlayerTank && AIControlledTank)) return;
+	MoveToActor(PlayerTank, AcceptanceRadius);
+	AIControlledTank->AimAt(PlayerTank->GetActorLocation());
+	AIControlledTank->Fire();
 }

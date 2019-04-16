@@ -11,20 +11,14 @@ void UTankMovementComponent::Initialize(UTankTrack * LeftTrackToSet, UTankTrack 
 
 
 void UTankMovementComponent::MoveForward(float Acceleration) {
-	if (!LeftTrack || !RightTrack) {
-		UE_LOG(LogTemp, Error, TEXT("UTankMovementComponent::MoveForward(float Acceleration): LeftTrack or RightTrack not initialized"));
-		return;
-	}
+	if (!ensure(LeftTrack && RightTrack)) return;
 	LeftTrack->MoveTrack(Acceleration);
 	RightTrack->MoveTrack(Acceleration);
 }
 
 
 void UTankMovementComponent::TurnRight(float Acceleration) {
-	if (!LeftTrack || !RightTrack) {
-		UE_LOG(LogTemp, Error, TEXT("UTankMovementComponent::TurnRight(float Acceleration): LeftTrack or RightTrack not initialized"));
-		return;
-	}
+	if (!ensure(LeftTrack && RightTrack)) return;
 	LeftTrack->MoveTrack(Acceleration);
 	RightTrack->MoveTrack(-Acceleration);
 }

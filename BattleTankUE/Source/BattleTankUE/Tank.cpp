@@ -15,26 +15,21 @@ ATank::ATank() {
 
 
 void ATank::AimAt(FVector AimPoint) const {
-	FindComponentByClass<UTankAimingComponent>()->AimAt(AimPoint, ProjectileInitialSpeed);
+	UTankAimingComponent *TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(TankAimingComponent)) return;
+	TankAimingComponent->AimAt(AimPoint, ProjectileInitialSpeed);
 }
 
 
 void ATank::Fire(){
-	/// Verify if the Tank is ready to fire regarding reload time and set LastFireTime if so
+	/// Verify if the Tank is ready to fire regarding reload time and set LastFireTime if so else stop Firing
 	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) >= ReloadTime;
 	if (!isReloaded) return;
 	LastFireTime = GetWorld()->GetTimeSeconds();
 
 	UTankBarrel *TankBarrel = FindComponentByClass<UTankBarrel>();
-	if (!TankBarrel) {
-		UE_LOG(LogTemp, Error, TEXT("UTank::Fire(): TankBarrel not found"));
-		return;
-	}
-	if (!ProjectileBlueprint) {
-		UE_LOG(LogTemp, Error, TEXT("UTank::Fire(): ProjectileBlueprint not set. Please set Projectile Blueprint in the TankBP Details panel."));
-		return;
-	}
 
+	if (!ensure(TankBarrel && ProjectileBlueprint)) return;
 	AProjectile *Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, TankBarrel->GetSocketLocation(FName("Projectile")), TankBarrel->GetSocketRotation(FName("Projectile")));
 	Projectile->LaunchProjectile(ProjectileInitialSpeed);
 }
