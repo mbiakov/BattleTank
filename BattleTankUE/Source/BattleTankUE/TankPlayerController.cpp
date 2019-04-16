@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "Tank.h"
+#include "TankAimingComponent.h"
 #include "Engine/World.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
 #include "Components/PrimitiveComponent.h"
@@ -9,6 +10,12 @@
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
+
+	UTankAimingComponent *TankAimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (!TankAimingComponent) {
+		UE_LOG(LogTemp, Error, TEXT("ATankPlayerController::BeginPlay(): TankAimingComponent not found"));
+	}
+	FoundTankAimingComponent(TankAimingComponent);
 }
 
 
