@@ -16,7 +16,8 @@ void ATankAIController::BeginPlay() {
 void ATankAIController::Tick(float DeltaTime){
 	Super::Tick(DeltaTime);
 
-	if (!ensure(PlayerPawn && TankAimingComponent)) return;
+	if (!ensure(PlayerPawn)) return;
+	if (!ensure(TankAimingComponent)) return;
 	MoveToActor(PlayerPawn, AcceptanceRadius);
 	TankAimingComponent->AimAt(PlayerPawn->GetActorLocation());
 	TankAimingComponent->Fire();

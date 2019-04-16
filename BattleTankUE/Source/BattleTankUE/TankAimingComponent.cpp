@@ -55,7 +55,8 @@ void UTankAimingComponent::AimAt(FVector AimPoint) {
 
 
 void UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection){
-	if (!ensure(Barrel && Turret)) return;
+	if (!ensure(Barrel)) return;
+	if (!ensure(Turret)) return;
 
 	/// Calculate the difference between the actual barrel rotation and and the NewBarrelDirection
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
@@ -73,7 +74,8 @@ void UTankAimingComponent::Fire() {
 	if (!isReloaded) return;
 	LastFireTime = GetWorld()->GetTimeSeconds();
 
-	if (!ensure(Barrel && ProjectileBlueprint)) return;
+	if (!ensure(Barrel)) return;
+	if (!ensure(ProjectileBlueprint)) return;
 	AProjectile *Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
 	Projectile->LaunchProjectile(ProjectileInitialSpeed);
 }
