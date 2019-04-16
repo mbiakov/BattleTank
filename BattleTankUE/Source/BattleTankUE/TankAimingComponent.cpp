@@ -3,7 +3,9 @@
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 
 
 // Sets default values for this component's properties
@@ -62,4 +64,16 @@ void UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection){
 
 	Barrel->Elevate(DeltaRotator.Pitch);
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+
+void UTankAimingComponent::Fire() {
+	/// Verify if the Tank is ready to fire regarding reload time and set LastFireTime if so else stop Firing
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) >= ReloadTime;
+	if (!isReloaded) return;
+	LastFireTime = GetWorld()->GetTimeSeconds();
+
+	if (!ensure(Barrel && ProjectileBlueprint)) return;
+	AProjectile *Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
+	Projectile->LaunchProjectile(ProjectileInitialSpeed);
 }

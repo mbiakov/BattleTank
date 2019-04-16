@@ -9,10 +9,10 @@
 // Forward Declarations
 class UTankAimingComponent;
 
-/*
+/**
 * Attaches the PlayerUI to the Viewport and Ray-Cast trough the Crosshair. Then calls the Aiming Component with the found position.
 * The conrtolled Pawn must have an UTankAimingComponent.
-**/
+*/
 UCLASS()
 class BATTLETANKUE_API ATankPlayerController : public APlayerController
 {
@@ -26,9 +26,10 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundTankAimingComponent(UTankAimingComponent *TankAimingComponent);
 
-private:
+	UPROPERTY(BlueprintReadOnly, Category = "Input")
 	UTankAimingComponent *TankAimingComponent = nullptr;
 
+private:
 	// Start the Tank moving the Barrel so that a shot will hit where the crosshair intersects the world
 	void AimTowardsCrosshair();
 

@@ -9,6 +9,7 @@
 // Forward declarations
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 // Enum defining Aiming State
 UENUM()
@@ -29,6 +30,9 @@ public:
 
 	void AimAt(FVector AimPoint);
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Fire();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -47,4 +51,12 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ProjectileInitialSpeed = 3500;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTime = 3;
+
+	float LastFireTime = 0;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 };
