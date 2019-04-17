@@ -12,13 +12,27 @@
 UTankAimingComponent::UTankAimingComponent() {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 
-// Called when the game starts
 void UTankAimingComponent::BeginPlay() {
 	Super::BeginPlay();
+
+	LastFireTime = GetWorld()->GetTimeSeconds();
+}
+
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) {
+	if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadTime) {
+		FiringStatus = EFiringStatus::Reloading;
+	}
+	else if (BerrelIsMovingOrNoAimingSolution()) {
+		FiringStatus = EFiringStatus::AimingNotReady;
+	}
+	else {
+		FiringStatus = EFiringStatus::Ready;
+	}
 }
 
 
@@ -48,8 +62,11 @@ void UTankAimingComponent::AimAt(FVector AimPoint) {
 	);
 
 	if (bHaveAimSolution) {
-		FVector AimDirection = LaunchVelocity.GetSafeNormal();
-		MoveBarrelTowards(AimDirection);
+		AimingDirection = LaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimingDirection);
+	}
+	else {
+		AimingDirection = FVector(0);
 	}
 }
 
@@ -69,13 +86,24 @@ void UTankAimingComponent::MoveBarrelTowards(FVector NewBarrelDirection){
 
 
 void UTankAimingComponent::Fire() {
-	/// Verify if the Tank is ready to fire regarding reload time and set LastFireTime if so else stop Firing
-	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) >= ReloadTime;
-	if (!isReloaded) return;
-	LastFireTime = GetWorld()->GetTimeSeconds();
-
 	if (!ensure(Barrel)) return;
 	if (!ensure(ProjectileBlueprint)) return;
+
+	if (FiringStatus == EFiringStatus::Reloading) return;
+
+	LastFireTime = GetWorld()->GetTimeSeconds();
 	AProjectile *Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
 	Projectile->LaunchProjectile(ProjectileInitialSpeed);
+}
+
+
+bool UTankAimingComponent::BerrelIsMovingOrNoAimingSolution() {
+	if (!ensure(Barrel)) return false;
+
+	FVector BarrelForwardVector = Barrel->GetForwardVector();
+
+	/// If no aiming solution AimingDirection = FVector(0) (see AimingDirection specifications) so BarrelForwardVector.Equals(AimingDirection) = False and we need to return True since we have no aiming solution
+	/// If we have an aiming solution and the BarrelForwardVector.Equals(AimingDirection) = True we must return False since Barrel is not moving
+	/// If we have an aiming solution and the BarrelForwardVector.Equals(AimingDirection) = False we must return True since Barrel is moving
+	return !BarrelForwardVector.Equals(AimingDirection, 0.01);
 }

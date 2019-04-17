@@ -14,8 +14,8 @@ class AProjectile;
 // Enum defining Aiming State
 UENUM()
 enum class EFiringStatus : uint8 {
-	Locked,
-	Aiming,
+	Ready,
+	AimingNotReady,
 	Reloading
 };
 
@@ -23,6 +23,7 @@ UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANKUE_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
+
 
 public:	
 	// Sets default values for this component's properties
@@ -33,21 +34,27 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
 
+	UPROPERTY(BlueprintReadOnly)
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
+
+
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
 
-	UPROPERTY(BlueprintReadOnly)
-	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
 private:
-	UTankBarrel *Barrel = nullptr;
-	UTankTurret *Turret = nullptr;
-
 	void MoveBarrelTowards(FVector NewBarrelDirection);
+
+	bool BerrelIsMovingOrNoAimingSolution();
+
+	UTankBarrel *Barrel = nullptr;
+
+	UTankTurret *Turret = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ProjectileInitialSpeed = 3500;
@@ -59,4 +66,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	// Used in BerrelIsMovingOrNoAimingSolution to compare to the actual Barrel direction. Updated each time the aiming method is called. If there is no aiming solution, the vector is set to FVector(0).
+	FVector AimingDirection = FVector(0);
 };
