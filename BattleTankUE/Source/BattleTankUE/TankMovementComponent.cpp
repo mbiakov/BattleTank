@@ -13,16 +13,16 @@ void UTankMovementComponent::Initialize(UTankTrack * LeftTrackToSet, UTankTrack 
 void UTankMovementComponent::MoveForward(float Acceleration) {
 	if (!ensure(LeftTrack)) return;
 	if (!ensure(RightTrack)) return;
-	LeftTrack->MoveTrack(Acceleration);
-	RightTrack->MoveTrack(Acceleration);
+	LeftTrack->AccelerateTrack(Acceleration);
+	RightTrack->AccelerateTrack(Acceleration);
 }
 
 
 void UTankMovementComponent::TurnRight(float Acceleration) {
 	if (!ensure(LeftTrack)) return;
 	if (!ensure(RightTrack)) return;
-	LeftTrack->MoveTrack(Acceleration);
-	RightTrack->MoveTrack(-Acceleration);
+	LeftTrack->AccelerateTrack(Acceleration);
+	RightTrack->AccelerateTrack(-Acceleration);
 }
 
 
