@@ -15,7 +15,7 @@ class BATTLETANKUE_API UTankBarrel : public UStaticMeshComponent
 public:
 	// Elevates the Barrel according the given RelativeSpeed and the MaxDegreesPerSecond parameter
 	// The RelativeSpeed is clamped between -1 and 1 by this function
-	void Elevate(float &RelativeSpeed);
+	void Elevate(float RelativeSpeed);
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")

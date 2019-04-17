@@ -15,7 +15,7 @@ class BATTLETANKUE_API UTankTurret : public UStaticMeshComponent
 public:
 	// Rotates the Turret according the given RelativeSpeed and the MaxDegreesPerSecond parameter
 	// The RelativeSpeed is clamped between -1 and 1 by this function
-	void Rotate(float &RelativeSpeed);
+	void Rotate(float RelativeSpeed);
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")

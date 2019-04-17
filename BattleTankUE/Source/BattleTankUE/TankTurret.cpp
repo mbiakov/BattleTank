@@ -4,7 +4,7 @@
 #include "Engine/World.h"
 
 
-void UTankTurret::Rotate(float &RelativeSpeed) {
+void UTankTurret::Rotate(float RelativeSpeed) {
 	/// Relative speed must be clamped between -1 and 1
 	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1, 1);
 

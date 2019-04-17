@@ -4,7 +4,7 @@
 #include "Engine/World.h"
 
 
-void UTankBarrel::Elevate(float &RelativeSpeed) {
+void UTankBarrel::Elevate(float RelativeSpeed) {
 	/// Relative speed must be clamped between -1 and 1
 	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1, 1);
 
