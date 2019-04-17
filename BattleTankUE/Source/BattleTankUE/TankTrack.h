@@ -13,6 +13,8 @@ class BATTLETANKUE_API UTankTrack : public UStaticMeshComponent
 	GENERATED_BODY()
 	
 public:
+	UTankTrack();
+
 	UFUNCTION(BlueprintCallable)
 	void MoveTrack(float Acceleration);
 
@@ -21,4 +23,12 @@ public:
 	// Unreal base distance unit is centimeters
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float BaseMovementForce = 37500000;
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+private:
+	void ApplySidewayFriction(float DeltaTime);
+	UStaticMeshComponent *TankMeshComponent = nullptr;
 };
