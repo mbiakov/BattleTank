@@ -14,6 +14,7 @@ class AProjectile;
 // Enum defining Aiming State
 UENUM()
 enum class EFiringStatus : uint8 {
+	NoRemainingAmmunitions,
 	Ready,
 	AimingNotReady,
 	Reloading
@@ -34,7 +35,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	EFiringStatus GetFiringStatus() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	int GetRemainingAmmunitions() const;
 
 
 protected:
@@ -45,14 +50,13 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankBarrel *BarrelToSet, UTankTurret *TurretToSet);
 
-	UPROPERTY(BlueprintReadOnly)
-	EFiringStatus FiringStatus = EFiringStatus::Reloading;
-
 
 private:
 	void MoveBarrelTowards(FVector NewBarrelDirection);
 
 	bool BerrelIsMovingOrNoAimingSolution();
+
+	void UpdateFiringStatus();
 
 	UTankBarrel *Barrel = nullptr;
 
@@ -71,4 +75,8 @@ private:
 
 	// Used in BerrelIsMovingOrNoAimingSolution to compare to the actual Barrel direction. Updated each time the aiming method is called. If there is no aiming solution, the vector is set to FVector(0).
 	FVector AimingDirection = FVector(0);
+
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
+
+	int RemainingAmmunitions = 3;
 };

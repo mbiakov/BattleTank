@@ -26,7 +26,21 @@ void UTankAimingComponent::BeginPlay() {
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadTime) {
+	UpdateFiringStatus();
+}
+
+
+void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet) {
+	Barrel = BarrelToSet;
+	Turret = TurretToSet;
+}
+
+
+void UTankAimingComponent::UpdateFiringStatus() {
+	if (RemainingAmmunitions < 1) {
+		FiringStatus = EFiringStatus::NoRemainingAmmunitions;
+	}
+	else if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadTime) {
 		FiringStatus = EFiringStatus::Reloading;
 	}
 	else if (BerrelIsMovingOrNoAimingSolution()) {
@@ -35,12 +49,6 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	else {
 		FiringStatus = EFiringStatus::Ready;
 	}
-}
-
-
-void UTankAimingComponent::Initialize(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet) {
-	Barrel = BarrelToSet;
-	Turret = TurretToSet;
 }
 
 
@@ -101,16 +109,12 @@ void UTankAimingComponent::Fire() {
 	if (!ensure(Barrel)) return;
 	if (!ensure(ProjectileBlueprint)) return;
 
-	if (FiringStatus == EFiringStatus::Reloading) return;
+	if (FiringStatus == EFiringStatus::Reloading || FiringStatus == EFiringStatus::NoRemainingAmmunitions) return;
 
+	RemainingAmmunitions = RemainingAmmunitions - 1;
 	LastFireTime = GetWorld()->GetTimeSeconds();
 	AProjectile *Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
 	Projectile->LaunchProjectile(ProjectileInitialSpeed);
-}
-
-
-EFiringStatus UTankAimingComponent::GetFiringStatus() const {
-	return FiringStatus;
 }
 
 
@@ -123,4 +127,14 @@ bool UTankAimingComponent::BerrelIsMovingOrNoAimingSolution() {
 	/// If we have an aiming solution and the BarrelForwardVector.Equals(AimingDirection) = True we must return False since Barrel is not moving
 	/// If we have an aiming solution and the BarrelForwardVector.Equals(AimingDirection) = False we must return True since Barrel is moving
 	return !BarrelForwardVector.Equals(AimingDirection, 0.01);
+}
+
+
+EFiringStatus UTankAimingComponent::GetFiringStatus() const {
+	return FiringStatus;
+}
+
+
+int UTankAimingComponent::GetRemainingAmmunitions() const {
+	return RemainingAmmunitions;
 }
