@@ -35,5 +35,8 @@ private:
 	UParticleSystemComponent *LaunchBlast = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent *ProjectileBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
 	UParticleSystemComponent *ImpactBlast = nullptr;
 };

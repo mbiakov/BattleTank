@@ -18,6 +18,9 @@ AProjectile::AProjectile() {
 	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
 	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
+	ProjectileBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Projectile Blast"));
+	ProjectileBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
 	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactBlast->bAutoActivate = false;
@@ -35,7 +38,7 @@ void AProjectile::BeginPlay() {
 
 
 void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit) {
-	LaunchBlast->Deactivate();
+	ProjectileBlast->Deactivate();
 	ImpactBlast->Activate();
 }
 
