@@ -46,7 +46,7 @@ public:
 	EFiringStatus GetFiringStatus() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	int GetRemainingAmmunitions() const;
+	int32 GetRemainingAmmunitions() const;
 
 
 protected:
@@ -66,8 +66,12 @@ private:
 	void UpdateFiringStatus();
 
 	UTankBarrel *Barrel = nullptr;
-
 	UTankTurret *Turret = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ProjectileInitialSpeed = 3500;
@@ -75,15 +79,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3;
 
-	float LastFireTime = 0;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 RemainingAmmunitions = 3;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	TSubclassOf<AProjectile> ProjectileBlueprint;
+	float LastFireTime = 0;
 
 	// Used in BerrelIsMovingOrNoAimingSolution to compare to the actual Barrel direction. Updated each time the aiming method is called. If there is no aiming solution, the vector is set to FVector(0).
 	FVector AimingDirection = FVector(0);
-
-	EFiringStatus FiringStatus = EFiringStatus::Reloading;
-
-	int RemainingAmmunitions = 3;
 };
