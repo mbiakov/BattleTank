@@ -24,6 +24,7 @@ public:
 
 protected:
 	// How close the AI Tank can get to the player
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float AcceptanceRadius = 8000;
 
 private:
