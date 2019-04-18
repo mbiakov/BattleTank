@@ -20,11 +20,12 @@ public:
 
 	virtual void BeginPlay() override;
 
-	virtual void Tick(float DeltaTime) override;
-
 	void LaunchProjectile(float LaunchSpeed);
 
 private:
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent *HitComponent, AActor *OtherActor, UPrimitiveComponent *OtherComponent, FVector NormalImpulse, const FHitResult &Hit);
+
 	UProjectileMovementComponent *ProjectileMovementComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
@@ -32,4 +33,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UParticleSystemComponent *LaunchBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent *ImpactBlast = nullptr;
 };
