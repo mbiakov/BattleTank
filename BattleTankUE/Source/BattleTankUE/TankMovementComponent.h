@@ -9,7 +9,8 @@
 class UTankTrack;
 
 /**
-* This component must be initialized with a Left Track and a Right Track at BeginPlay.
+* Requirements:
+*   - This component must be initialized with a Left Track and a Right Track at BeginPlay.
 * Responsible for the Tank movements.
 */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))

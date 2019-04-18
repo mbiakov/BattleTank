@@ -21,7 +21,10 @@ enum class EFiringStatus : uint8 {
 };
 
 /**
-* This component must be initialized with a Turret and a Barrel Track at BeginPlay.
+* Requirements:
+*   - This component must be initialized with a Turret and a Barrel at BeginPlay.
+*   - The Barrel mesh must have a Projectile Socket.
+*   - A Projectile Blueprint must be set in the Details.
 * Responsible for the Tank aiming, firing and Barrel/Turret movements.
 */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
