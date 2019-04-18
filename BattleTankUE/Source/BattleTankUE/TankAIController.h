@@ -22,10 +22,11 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	// How close the AI Tank can get to the player
+	float AcceptanceRadius = 8000;
+
 private:
 	UTankAimingComponent *TankAimingComponent = nullptr;
 	APawn *PlayerPawn = nullptr;
-
-	// How close the AI Tank can get to the player
-	float AcceptanceRadius = 1000;
 };

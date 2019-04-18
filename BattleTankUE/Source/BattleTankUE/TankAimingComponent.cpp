@@ -109,6 +109,11 @@ void UTankAimingComponent::Fire() {
 }
 
 
+EFiringStatus UTankAimingComponent::GetFiringStatus() const {
+	return FiringStatus;
+}
+
+
 bool UTankAimingComponent::BerrelIsMovingOrNoAimingSolution() {
 	if (!ensure(Barrel)) return false;
 
