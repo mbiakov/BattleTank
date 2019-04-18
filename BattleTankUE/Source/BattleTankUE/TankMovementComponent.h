@@ -9,7 +9,8 @@
 class UTankTrack;
 
 /**
-* Responsible for the Tank movements
+* This component must be initialized with a Left Track and a Right Track at BeginPlay.
+* Responsible for the Tank movements.
 */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANKUE_API UTankMovementComponent : public UNavMovementComponent

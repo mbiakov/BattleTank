@@ -20,6 +20,10 @@ enum class EFiringStatus : uint8 {
 	Reloading
 };
 
+/**
+* This component must be initialized with a Turret and a Barrel Track at BeginPlay.
+* Responsible for the Tank aiming, firing and Barrel/Turret movements.
+*/
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANKUE_API UTankAimingComponent : public UActorComponent
 {
