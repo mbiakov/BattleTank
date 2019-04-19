@@ -9,6 +9,7 @@
 // Forward declarations
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
+class URadialForceComponent;
 
 UCLASS()
 class BATTLETANKUE_API AProjectile : public AActor
@@ -39,4 +40,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UParticleSystemComponent *ImpactBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
+	URadialForceComponent *ExplosionForce = nullptr;
 };
