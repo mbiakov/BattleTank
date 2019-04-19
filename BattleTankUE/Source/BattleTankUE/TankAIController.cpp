@@ -3,6 +3,7 @@
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
 #include "Tank.h"
+#include "Mortar.h"
 #include "Engine/World.h"
 
 
@@ -18,9 +19,18 @@ void ATankAIController::SetPawn(APawn * InPawn) {
 	if (!InPawn) return; // The method is called at the end of the game with a nullptr InPawn
 
 	TankAimingComponent = InPawn->FindComponentByClass<UTankAimingComponent>();
+
 	ATank *AITank = Cast<ATank>(InPawn);
-	if (!ensure(AITank)) return;
-	AITank->OnTankDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedTankDeath);
+	AMortar *AIMortar = Cast<AMortar>(InPawn);
+	if (AITank) {
+		AITank->OnTankDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedPawnDeath);
+	}
+	else if (AIMortar) {
+		AIMortar->OnMortarDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedPawnDeath);
+	}
+	else {
+		ensure(false);
+	}
 }
 
 
@@ -40,6 +50,6 @@ void ATankAIController::Tick(float DeltaTime){
 }
 
 
-void ATankAIController::OnPossessedTankDeath() {
+void ATankAIController::OnPossessedPawnDeath() {
 	GetPawn()->DetachFromControllerPendingDestroy();
 }

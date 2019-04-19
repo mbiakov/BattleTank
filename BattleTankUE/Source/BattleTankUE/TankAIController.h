@@ -30,7 +30,7 @@ protected:
 
 private:
 	UFUNCTION()
-	void OnPossessedTankDeath();
+	void OnPossessedPawnDeath();
 
 	UTankAimingComponent *TankAimingComponent = nullptr;
 	APawn *PlayerPawn = nullptr;
