@@ -9,6 +9,13 @@ ATank::ATank() {
 }
 
 
+void ATank::BeginPlay() {
+	Super::BeginPlay();
+
+	CurrentHealth = StartingHealth;
+}
+
+
 float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser) {
 	float DamageAmountToApply = FMath::Clamp<float>(DamageAmount, 0, CurrentHealth);
 

@@ -92,5 +92,5 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector &OutHitLocation, FV
 
 
 void ATankPlayerController::OnPossessedTankDeath() {
-	UE_LOG(LogTemp, Warning, TEXT("OnTankDeath function called inside TankPlayerController"));
+	StartSpectatingOnly();
 }

@@ -23,10 +23,11 @@ public:
 
 private:
 	ATank();
+	virtual void BeginPlay();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
 	float StartingHealth = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-	float CurrentHealth = StartingHealth;
+	float CurrentHealth;
 };

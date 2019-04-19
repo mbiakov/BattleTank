@@ -41,5 +41,5 @@ void ATankAIController::Tick(float DeltaTime){
 
 
 void ATankAIController::OnPossessedTankDeath() {
-	UE_LOG(LogTemp, Warning, TEXT("OnTankDeath function called inside TankAIController"));
+	GetPawn()->DetachFromControllerPendingDestroy();
 }
