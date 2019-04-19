@@ -7,6 +7,7 @@
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Engine/World.h"
 #include "Public/TimerManager.h"
+#include "Classes/Kismet/GameplayStatics.h"
 
 
 AProjectile::AProjectile() {
@@ -44,13 +45,16 @@ void AProjectile::BeginPlay() {
 
 
 void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit) {
+	/// Destroying the mesh to prevent it taking damage in place of the Tank. The Projectile Destruction will come at the end of the method.
+	SetRootComponent(ImpactBlast);
+	CollisionMesh->DestroyComponent();
+
 	ProjectileBlast->Deactivate();
 	ImpactBlast->Activate();
+	UGameplayStatics::ApplyRadialDamage(this, BaseDamageAmount, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
 	ExplosionForce->FireImpulse();
 
 	/// Destroying the Projectile
-	SetRootComponent(ImpactBlast);
-	CollisionMesh->DestroyComponent();
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::DestroyProjectileTimerDelegate, DestroyDelay, false);
 }

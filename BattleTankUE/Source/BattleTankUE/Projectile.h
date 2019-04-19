@@ -29,6 +29,9 @@ private:
 
 	void DestroyProjectileTimerDelegate();
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float BaseDamageAmount = 20;
+
 	UProjectileMovementComponent *ProjectileMovementComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
