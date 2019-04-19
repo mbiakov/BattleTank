@@ -2,14 +2,25 @@
 
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 #include "Engine/World.h"
 
 
 void ATankAIController::BeginPlay() {
 	Super::BeginPlay();
 
-	TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+}
+
+
+void ATankAIController::SetPawn(APawn * InPawn) {
+	Super::SetPawn(InPawn);
+	if (!InPawn) return; // The method is called at the end of the game with a nullptr InPawn
+
+	TankAimingComponent = InPawn->FindComponentByClass<UTankAimingComponent>();
+	ATank *AITank = Cast<ATank>(InPawn);
+	if (!ensure(AITank)) return;
+	AITank->OnTankDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedTankDeath);
 }
 
 
@@ -26,4 +37,9 @@ void ATankAIController::Tick(float DeltaTime){
 	if (TankAimingComponent->GetFiringStatus() == EFiringStatus::Ready) {
 		TankAimingComponent->Fire();
 	}
+}
+
+
+void ATankAIController::OnPossessedTankDeath() {
+	UE_LOG(LogTemp, Warning, TEXT("OnTankDeath function called inside TankAIController"));
 }

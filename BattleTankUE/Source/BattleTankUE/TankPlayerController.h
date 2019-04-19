@@ -21,6 +21,7 @@ class BATTLETANKUE_API ATankPlayerController : public APlayerController
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void SetPawn(APawn* InPawn) override;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
@@ -30,6 +31,9 @@ protected:
 	UTankAimingComponent *TankAimingComponent = nullptr;
 
 private:
+	UFUNCTION()
+	void OnPossessedTankDeath();
+
 	// Start the Tank moving the Barrel so that a shot will hit where the crosshair intersects the world
 	void AimTowardsCrosshair();
 

@@ -14,11 +14,8 @@ float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AC
 
 	CurrentHealth = CurrentHealth - DamageAmountToApply;
 
-	UE_LOG(LogTemp, Warning, TEXT("Remaining Health: %f"), CurrentHealth);
-
 	if (CurrentHealth <= 0) {
-		// TODO Trigger the die event
-		UE_LOG(LogTemp, Warning, TEXT("Must Die"));
+		OnTankDeath.Broadcast();
 	}
 
 	return DamageAmountToApply;

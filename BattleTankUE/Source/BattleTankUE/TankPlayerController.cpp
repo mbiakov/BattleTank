@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 #include "Engine/World.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
 #include "Components/PrimitiveComponent.h"
@@ -9,10 +10,20 @@
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
+}
 
-	TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+
+void ATankPlayerController::SetPawn(APawn * InPawn) {
+	Super::SetPawn(InPawn);
+	if (!InPawn) return; // The method is called at the end of the game with a nullptr InPawn
+
+	TankAimingComponent = InPawn->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(TankAimingComponent)) return;
 	FoundTankAimingComponent(TankAimingComponent);
+
+	ATank *PlayerTank = Cast<ATank>(InPawn);
+	if (!ensure(PlayerTank)) return;
+	PlayerTank->OnTankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossessedTankDeath);
 }
 
 
@@ -21,6 +32,7 @@ void ATankPlayerController::Tick(float DeltaTime) {
 
 	AimTowardsCrosshair();
 }
+
 
 void ATankPlayerController::AimTowardsCrosshair() {
 	if (!ensure(TankAimingComponent)) return;
@@ -76,4 +88,9 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector &OutHitLocation, FV
 
 	OutHitLocation = Hit.Location;
 	return true;
+}
+
+
+void ATankPlayerController::OnPossessedTankDeath() {
+	UE_LOG(LogTemp, Warning, TEXT("OnTankDeath function called inside TankPlayerController"));
 }

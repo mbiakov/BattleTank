@@ -21,6 +21,7 @@ class BATTLETANKUE_API ATankAIController : public AAIController
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void SetPawn(APawn* InPawn) override;
 
 protected:
 	// How close the AI Tank can get to the player
@@ -28,6 +29,9 @@ protected:
 	float AcceptanceRadius = 8000;
 
 private:
+	UFUNCTION()
+	void OnPossessedTankDeath();
+
 	UTankAimingComponent *TankAimingComponent = nullptr;
 	APawn *PlayerPawn = nullptr;
 };
