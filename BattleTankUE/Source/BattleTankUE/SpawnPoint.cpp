@@ -2,6 +2,7 @@
 
 #include "SpawnPoint.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 
 
 USpawnPoint::USpawnPoint() {
@@ -16,9 +17,10 @@ void USpawnPoint::BeginPlay() {
 	Super::BeginPlay();
 
 	if (!ensure(SpawnClass)) return;
-	AActor *NewActor = GetWorld()->SpawnActor<AActor>(SpawnClass);
+	AActor *NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
 	if (!ensure(NewActor)) return;
-	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+	UGameplayStatics::FinishSpawningActor(NewActor, GetComponentTransform());
 }
 
 
