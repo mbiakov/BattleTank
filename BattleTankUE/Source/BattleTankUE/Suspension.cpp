@@ -12,33 +12,39 @@ ASuspension::ASuspension() {
 	Suspension = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Suspension"));
 	SetRootComponent(Suspension);
 
-	Mass = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mass"));
-	Mass->AttachToComponent(Suspension, FAttachmentTransformRules::KeepRelativeTransform);
-	Mass->SetSimulatePhysics(true);
-	Mass->SetMassOverrideInKg(NAME_None, 10000);
+	Axis = CreateDefaultSubobject<UStaticMeshComponent>(FName("Axis"));
+	Axis->SetupAttachment(Suspension);
+	Axis->SetSimulatePhysics(true);
+	Axis->SetMassOverrideInKg(NAME_None, 1000);
+
+	WheelRotationConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("WheelRotationConstraint"));
+	WheelRotationConstraint->SetupAttachment(Axis);
 
 	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->AttachToComponent(Suspension, FAttachmentTransformRules::KeepRelativeTransform);
+	Wheel->SetupAttachment(WheelRotationConstraint);
 	Wheel->SetSimulatePhysics(true);
-	Wheel->SetMassOverrideInKg(NAME_None, 100);
+	Wheel->SetMassOverrideInKg(NAME_None, 1000);
 }
 
 
 void ASuspension::BeginPlay() {
 	Super::BeginPlay();
 
-	if (GetAttachParentActor()) {
-		// TODO Delete the log
-		UE_LOG(LogTemp, Warning, TEXT("Suspension attached to %s"), *GetAttachParentActor()->GetName());
-	}
-	else {
-		// TODO Delete the log
-		UE_LOG(LogTemp, Warning, TEXT("Suspension is not attached"));
-	}
+	SetupConstrainedComponents();
 }
 
 
 void ASuspension::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
+}
+
+
+void ASuspension::SetupConstrainedComponents() {
+	if (!ensure(GetAttachParentActor())) return;
+	UPrimitiveComponent *TankBody = Cast<UPrimitiveComponent>(GetAttachParentActor()->GetRootComponent());
+	if (!ensure(TankBody)) return;
+	Suspension->SetConstrainedComponents(TankBody, NAME_None, Axis, NAME_None);
+
+	WheelRotationConstraint->SetConstrainedComponents(Axis, NAME_None, Wheel, NAME_None);
 }
 
