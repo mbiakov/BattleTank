@@ -12,12 +12,15 @@ class BATTLETANKUE_API USpawnPoint : public USceneComponent
 {
 	GENERATED_BODY()
 
-public:	
-	USpawnPoint();
-	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+public:
+	AActor* GetSpawnedActor() const;
 
 private:
+	UPROPERTY()
+	AActor *SpawnedActor = nullptr;
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AActor> SpawnClass;
+
+	USpawnPoint();
+	virtual void BeginPlay() override;
 };

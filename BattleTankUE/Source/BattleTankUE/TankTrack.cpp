@@ -1,6 +1,8 @@
 // MBI Copyrights
 
 #include "TankTrack.h"
+#include "Suspension.h"
+#include "SpawnPoint.h"
 #include "Engine/World.h"
 
 
@@ -9,43 +11,38 @@ UTankTrack::UTankTrack() {
 }
 
 
-void UTankTrack::BeginPlay() {
-	Super::BeginPlay();
-
-	TankMeshComponent = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
-
-	/// Adding OnHit event generation
-	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
-}
-
-
-// This function is called every frame if the Tank touches the ground. So all the movements are applied in here.
-void UTankTrack::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit) {
-	MoveTrack();
-	ApplySidewayFriction();
-	TrackAcceleration = 0;
-}
-
-
 void UTankTrack::AccelerateTrack(float Acceleration) {
-	TrackAcceleration = FMath::Clamp<float>(TrackAcceleration + Acceleration, -2, 2);
+	float TrackAcceleration = FMath::Clamp<float>(Acceleration, -2, 2);
+	MoveTrack(TrackAcceleration);
 }
 
 
-void UTankTrack::MoveTrack() {
-	if (!ensure(TankMeshComponent)) return;
+void UTankTrack::MoveTrack(float TrackAcceleration) {
+	float ForceMagnitude = TrackAcceleration * BaseMovementForce;
+	TArray<ASuspension*> Suspensions = GetSuspensions();
+	if (!ensure(Suspensions.Num() != 0)) return;
+	float ForceMagnitudePerWheel = ForceMagnitude / Suspensions.Num();
 
-	FVector ForceToApply = GetForwardVector() * TrackAcceleration * BaseMovementForce;
-	TankMeshComponent->AddForceAtLocation(ForceToApply, GetComponentLocation());
+	for (ASuspension *Suspension : Suspensions) {
+		Suspension->AddDrivingForce(ForceMagnitudePerWheel);
+	}
 }
 
 
-void UTankTrack::ApplySidewayFriction() {
-	if (!ensure(TankMeshComponent)) return;
+TArray<ASuspension*> UTankTrack::GetSuspensions() const {
+	TArray<ASuspension*> ResultArray;
 
-	float SlippageSpeed = FVector::DotProduct(GetComponentVelocity(), GetRightVector());
-	float DeltaTime = GetWorld()->GetDeltaSeconds();
-	FVector AccelerationCorrection = - SlippageSpeed / DeltaTime * GetRightVector();
-	FVector ForceToApply = TankMeshComponent->GetMass() * AccelerationCorrection / 2; /// We devide by 2 because there is 2 tracks
-	TankMeshComponent->AddForce(ForceToApply);
+	TArray<USceneComponent*> Children;
+	GetChildrenComponents(false, Children);
+	for (USceneComponent *Child : Children) {
+		USpawnPoint *SpawnPoint = Cast<USpawnPoint>(Child);
+		if (!SpawnPoint) continue;
+		
+		ASuspension *Suspension = Cast<ASuspension>(SpawnPoint->GetSpawnedActor());
+		if (!ensure(Suspension)) continue;
+
+		ResultArray.Add(Suspension);
+	}
+
+	return ResultArray;
 }

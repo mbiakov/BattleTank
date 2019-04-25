@@ -13,12 +13,13 @@ class BATTLETANKUE_API ASuspension : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	ASuspension();
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
+public:
+	void AddDrivingForce(float ForceMagnitude);
 
 private:
+	void ApplyForce();
+	float ForceMagnitudeToApplyThisFrame = 0;
+
 	void SetupConstrainedComponents();
 
 	// Components
@@ -30,4 +31,10 @@ private:
 	UPhysicsConstraintComponent *WheelRotationConstraint = nullptr;
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent *Wheel = nullptr;
+
+	ASuspension();
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult &Hit);
 };
